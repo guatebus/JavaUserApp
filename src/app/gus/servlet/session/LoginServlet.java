@@ -1,12 +1,12 @@
 package app.gus.servlet.session;
  
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +17,12 @@ import javax.servlet.http.HttpSession;
 /**
  * Login endpoint
  */
-@WebServlet("/LoginServlet")
+@WebServlet(
+        name = "LoginServlet" ,
+        urlPatterns = { "/LoginServlet" },
+        initParams = {
+                @WebInitParam(name = "sessionMinutes", value = "5")
+        })
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = -6908417593825706709L;
 
@@ -28,6 +33,15 @@ public class LoginServlet extends HttpServlet {
     	userHash.put("1", "1");
     	userHash.put("2", "2");
     	userHash.put("3", "3");
+    }
+
+    protected int sessionLength = 0;
+
+    public void init(ServletConfig servletConfig) throws ServletException{
+      this.sessionLength = Integer.parseInt(servletConfig.getInitParameter("sessionMinutes"));
+      if (this.sessionLength <= 0) {
+    	  throw new ServletException("sessionMinutes configuration error");
+      }
     }
  
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
@@ -41,16 +55,14 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             //set session expiration
-            session.setMaxInactiveInterval(5*60);
+            session.setMaxInactiveInterval(this.sessionLength*60);
             Cookie userName = new Cookie("user", user);
-            userName.setMaxAge(5*60);
+            userName.setMaxAge(this.sessionLength*60);
             response.addCookie(userName);
             response.sendRedirect("LoginSuccess.jsp");
         }else{
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
-            PrintWriter out= response.getWriter();
-            out.println("<font color=red>Wrong username password combination</font>");
-            rd.include(request, response);
+            response.getWriter().println("<font color=red>Wrong username password combination</font>");
+            request.getRequestDispatcher("/login.html").include(request, response);
         }
  
     }
