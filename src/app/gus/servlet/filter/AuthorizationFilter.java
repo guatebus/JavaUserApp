@@ -51,17 +51,28 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
-         
+        
+        //allow login / logout servlets and resources
+        if (
+        	uri.endsWith("login.html") ||
+        	uri.endsWith("login-servlet") ||
+        	uri.endsWith("login-success.jsp") ||
+        	uri.endsWith("logout-servlet")) {
+    		chain.doFilter(request, response);
+    		
+    		return;
+        }
+
+        //apply filters to all other resources
         if (this.isAuthenticated(req, res, uri) &&
-    		this.isAllowedResource(req, res, uri) &&
+    		this.isResourceAllowed(req, res, uri) &&
     		this.isUserAuthorized(req, res)) {
         		chain.doFilter(request, response);
         }
     }
     
     protected boolean isAuthenticated(HttpServletRequest req, HttpServletResponse res, String uri) throws IOException {
-    	HttpSession session = req.getSession(false); 
-        if(session == null && !(uri.endsWith("login.html") || uri.endsWith("login-servlet"))){
+    	if(req.getSession(false) == null){
         	System.out.println("AuthenticationFilter :: unauthenticated request for resource: "+uri);
             res.sendRedirect("/login.html");
             
@@ -71,7 +82,7 @@ public class AuthorizationFilter implements Filter {
         return true;
     }
 
-    protected boolean isAllowedResource(HttpServletRequest req, HttpServletResponse res, String uri) throws IOException {
+    protected boolean isResourceAllowed(HttpServletRequest req, HttpServletResponse res, String uri) throws IOException {
     	//block direct access to page.jsp resource
     	if (uri.contains("page.jsp")){
         	System.out.println("AuthenticationFilter :: attempted direct access to resource: "+uri);
@@ -83,9 +94,7 @@ public class AuthorizationFilter implements Filter {
         return true;
     }
 
-    protected boolean isUserAuthorized(HttpServletRequest req, HttpServletResponse res) {
-    	return true;
-    	
+    protected boolean isUserAuthorized(HttpServletRequest req, HttpServletResponse res) throws IOException {
     	String requestedResourceID = req.getParameter("p");
     	System.out.println("AuthorizationFilter :: Requested param: " + requestedResourceID);
     	
