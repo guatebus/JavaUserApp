@@ -25,7 +25,7 @@ for(Cookie cookie : cookies){
 %>
 <h3>Hi user: <%=userName %>, your session id is: <%=sessionID %></h3>
 <br>
-<form action="LogoutServlet" method="post">
+<form action="logout-servlet" method="post">
 <input type="submit" value="Logout" >
 </form>
 </body>

@@ -18,8 +18,8 @@ import javax.servlet.http.HttpSession;
  * Login endpoint
  */
 @WebServlet(
-        name = "LoginServlet" ,
-        urlPatterns = { "/LoginServlet" },
+        name = "login-servlet" ,
+        urlPatterns = { "/login-servlet" },
         initParams = {
                 @WebInitParam(name = "sessionMinutes", value = "5")
         })
@@ -59,7 +59,7 @@ public class LoginServlet extends HttpServlet {
             Cookie userName = new Cookie("user", user);
             userName.setMaxAge(this.sessionLength*60);
             response.addCookie(userName);
-            response.sendRedirect("LoginSuccess.jsp");
+            response.sendRedirect("login-success.jsp");
         }else{
             response.getWriter().println("<font color=red>Wrong username password combination</font>");
             request.getRequestDispatcher("/login.html").include(request, response);
