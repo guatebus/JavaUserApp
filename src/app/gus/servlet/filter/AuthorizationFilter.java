@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
  
-@WebFilter("/AuthenticationFilter")
-public class AuthenticationFilter implements Filter {
+@WebFilter("/AuthorizationFilter")
+public class AuthorizationFilter implements Filter {
 
     /**
      * Maps user ids to roles
