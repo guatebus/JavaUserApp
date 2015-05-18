@@ -49,31 +49,40 @@ public class AuthorizationFilter implements Filter {
      
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
-        String uri = req.getRequestURI();
+    	String uri = req.getRequestURI();
         
         //allow login / logout servlets and resources
-        if (
-        	uri.endsWith("login.html") ||
-        	uri.endsWith("login-servlet") ||
-        	uri.endsWith("login-success.jsp") ||
-        	uri.endsWith("logout-servlet")) {
+        if (this.isAuthenticationResource(uri)) {
     		chain.doFilter(request, response);
     		
     		return;
         }
-
+        
+        HttpServletResponse res = (HttpServletResponse) response;
+        
         //apply filters to all other resources
-        if (this.isAuthenticated(req, res, uri) &&
+        if (this.isAuthenticated(req, res) &&
     		this.isResourceAllowed(req, res, uri) &&
     		this.isUserAuthorized(req, res)) {
         		chain.doFilter(request, response);
         }
     }
     
-    protected boolean isAuthenticated(HttpServletRequest req, HttpServletResponse res, String uri) throws IOException {
+    protected boolean isAuthenticationResource(String uri) throws IOException {
+    	if (uri.endsWith("login.html") ||
+        	uri.endsWith("login-servlet") ||
+        	uri.endsWith("login-success.jsp") ||
+        	uri.endsWith("logout-servlet")) {
+    		
+    		return true;
+    	}
+    	
+    	return false;
+    }
+    
+    protected boolean isAuthenticated(HttpServletRequest req, HttpServletResponse res) throws IOException {
     	if(req.getSession(false) == null){
-        	System.out.println("AuthenticationFilter :: unauthenticated request for resource: "+uri);
+        	System.out.println("AuthenticationFilter :: unauthenticated request for resource: "+req.getRequestURI());
             res.sendRedirect("/login.html");
             
             return false;
