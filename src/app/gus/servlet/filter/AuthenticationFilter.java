@@ -30,7 +30,11 @@ public class AuthenticationFilter implements Filter {
         if(session == null && !(uri.endsWith("login.html") || uri.endsWith("login-servlet"))){
         	System.out.println("AuthenticationFilter :: unauthenticated request for resource: "+uri);
             res.sendRedirect("/login.html");
-        }else{
+        }else if (session != null && uri.contains("page.jsp")){
+        	System.out.println("AuthenticationFilter :: attempted direct access to resource: "+uri);
+        	res.sendError(HttpServletResponse.SC_FORBIDDEN);
+        } else {
+
             chain.doFilter(request, response);
         }
     }

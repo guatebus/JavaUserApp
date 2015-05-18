@@ -25,7 +25,7 @@ if(cookies != null){
 %>
 <h3>Hola <%=userName %></h3>
 <br>
-<h3>This is page: Page number!!</h3>
+<h3>This is page <%= request.getParameter("p") %></h3>
 <br>
 <form action="/logout-servlet" method="post">
 <input type="submit" value="Logout" >
