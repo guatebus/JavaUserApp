@@ -68,7 +68,7 @@ public class LoginServlet extends HttpServlet {
     }
     
     /**
-     * Abstraction method to fetch user records from persistence layer (db)
+     * Abstraction to fetch user records from persistence layer (db)
      * @param username
      * @return
      */

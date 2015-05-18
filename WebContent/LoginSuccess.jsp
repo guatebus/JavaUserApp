@@ -23,9 +23,7 @@ for(Cookie cookie : cookies){
 }
 }
 %>
-<h3>Hi <%=userName %>, Login successful. Your Session ID=<%=sessionID %></h3>
-<br>
-User=<%=user %>
+<h3>Hi user: <%=userName %>, your session id is: <%=sessionID %></h3>
 <br>
 <form action="LogoutServlet" method="post">
 <input type="submit" value="Logout" >
