@@ -13,10 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import app.gus.security.voter.ResourceVoter;
+import app.gus.security.voter.ResourceVoterInterface;
  
 @WebFilter("/AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
+	
+	protected ResourceVoterInterface voter;
+	
+	public AuthorizationFilter setVoter(ResourceVoterInterface voter) {
+		this.voter = voter;
+		
+		return this;
+	}
 
     public void init(FilterConfig fConfig) throws ServletException {
     }
@@ -86,8 +94,7 @@ public class AuthorizationFilter implements Filter {
         System.out.println("AuthorizationFilter:: current user: "+userID);
         
         //ask voter if resource is allowed for user
-        ResourceVoter voter = new ResourceVoter();
-        if (voter.doVote(userID, requestedResourceID)) {
+        if (this.voter.doVote(userID, requestedResourceID)) {
         	return true;
         }
     	

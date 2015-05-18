@@ -3,7 +3,7 @@ package app.gus.security.voter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResourceVoter {
+public class ResourceVoter implements ResourceVoterInterface {
 
     /**
      * Maps user ids to roles
