@@ -26,6 +26,11 @@ import javax.servlet.http.HttpSession;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = -6908417593825706709L;
 
+    /**
+     * Maps user ids to passwords
+     * ** In production, this data would be in the persistence layer **
+     * ** In production, password data should be hashed **
+     */
     private static final Map<String, String> userHash;
     static
     {
@@ -69,11 +74,11 @@ public class LoginServlet extends HttpServlet {
     
     /**
      * Abstraction to fetch user records from persistence layer (db)
-     * @param username
+     * @param userID
      * @return
      */
-    protected String fetchUser(String username){
-        return userHash.get(username);
+    protected String fetchUser(String userID){
+        return userHash.get(userID);
     }
  
 }

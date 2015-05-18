@@ -18,7 +18,11 @@ import javax.servlet.http.HttpServletResponse;
         urlPatterns = { "/resources" })
 public class ResourceServlet extends HttpServlet {
 	private static final long serialVersionUID = -7565940648825117787L;
-	
+
+    /**
+     * Lists available resources
+     * ** In production, this data would be in the persistence layer **
+     */
 	private static final List<Integer> availableResources;
 	static {
 		availableResources = Arrays.asList(1, 2, 3);
