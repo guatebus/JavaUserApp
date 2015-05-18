@@ -20,7 +20,7 @@ public class AuthorizationFilter implements Filter {
 
     /**
      * Maps user ids to roles
-     * ** In production, this data would be in the persistence layer **
+     * ** In production, this data would be in the persistence layer (DB) **
      */
     private static final Map<String, String> userRole;
     static
@@ -33,7 +33,7 @@ public class AuthorizationFilter implements Filter {
 
     /**
      * Maps resource (page) ids to roles required to view it
-     * ** In production, this data would be in the persistence layer **
+     * ** In production, this data would be in the persistence layer (DB) **
      */
     private static final Map<String, String> resourceRole;
     static

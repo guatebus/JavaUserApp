@@ -28,7 +28,7 @@ public class LoginServlet extends HttpServlet {
 
     /**
      * Maps user ids to passwords
-     * ** In production, this data would be in the persistence layer **
+     * ** In production, this data would be in the persistence layer (DB) **
      * ** In production, password data should be hashed **
      */
     private static final Map<String, String> userHash;
