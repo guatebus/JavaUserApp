@@ -28,8 +28,8 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = req.getSession(false);
          
         if(session == null && !(uri.endsWith("login.html") || uri.endsWith("LoginServlet"))){
-        	System.out.println("Unauthenticated request for resource: "+uri);
-            res.sendRedirect("login.html");
+        	System.out.println("AuthenticationFilter :: unauthenticated request for resource: "+uri);
+            res.sendRedirect("/login.html");
         }else{
             chain.doFilter(request, response);
         }
