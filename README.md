@@ -9,12 +9,11 @@ Welcome page at /login.html, login with username 1, 2 or 3 (same pwd as username
 Users are directed to a successful login page, they can then access their resource at /resource?p={id}
 User has access to resource with same id as their username. This is done via userId-userRole and resourceId-userRole relationship (as would work in a real persistence layer)
 
-Note:
-User data is hard-coded into the app - this app is only meant as an exercise!
+Best practices:
+Persistence of application data should always be done on it's own layer.
 
 ## Pending
-Automated build is in the process - see maven branch
-Hashing user pwds is needed still
+Automated build is in the process (branch maven)
 
 ## Requirements
 En JAVA. Es un plus hacerlo con las extensiones funcionales.
