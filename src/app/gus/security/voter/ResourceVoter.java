@@ -6,6 +6,8 @@ import java.util.Map;
 public class ResourceVoter implements ResourceVoterInterface {
 
     /**
+	 * THIS DATA SHOULD BE STORED BY A PERSISTENCE COMPONENT
+	 * 
      * Maps user ids to roles
      * ** In production, this data would be in the persistence layer (DB) **
      */
@@ -19,6 +21,8 @@ public class ResourceVoter implements ResourceVoterInterface {
     }
 
     /**
+	 * THIS DATA SHOULD BE STORED BY A PERSISTENCE COMPONENT
+	 * 
      * Maps resource (page) ids to roles required to view it
      * ** In production, this data would be in the persistence layer (DB) **
      */

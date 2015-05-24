@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
@@ -26,18 +27,34 @@ import javax.servlet.http.HttpSession;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = -6908417593825706709L;
 
+	private static final String salt = "d4a273c8";
+	
+	/**
+	 * THIS SHOULD BE HANDLED BY A HASH SECURITY CLASS
+	 * 
+	 * Abstraction where password+salt hash would be used - hash dependency should be injected
+	 * @param input
+	 * @return
+	 */
+	private static final String getHash(String input) {
+		// Hashing algorithm would be applied to input + salt and returned here...
+		return input+salt;
+	}
+
     /**
-     * Maps user ids to passwords
-     * ** In production, this data would be in the persistence layer (DB) **
-     * ** In production, password data should be hashed **
+	 * THIS DATA SHOULD BE STORED BY A PERSISTENCE COMPONENT
+	 * 
+     * Maps user ids to (salted) passwords
+     * ** In production this data would be in the persistence layer (DB) **
+     * ** In production passwords would be hashed **
      */
     private static final Map<String, String> userHash;
     static
     {
     	userHash = new HashMap<String, String>();
-    	userHash.put("1", "1");
-    	userHash.put("2", "2");
-    	userHash.put("3", "3");
+    	userHash.put("1", getHash("1"));
+    	userHash.put("2", getHash("2"));
+    	userHash.put("3", getHash("3"));
     }
 
     protected int sessionLength = 0;
@@ -50,11 +67,14 @@ public class LoginServlet extends HttpServlet {
 		this.sessionLength = minutes * 60;
 	}
 
-	public void init(ServletConfig conf) throws ServletException{
-      this.setSessionLength(Integer.parseInt(conf.getInitParameter("sessionMinutes")));
-      if (this.sessionLength <= 0) {
-    	  throw new ServletException("sessionLength config error");
-      }
+	protected ServletContext context;
+	
+	public void init(ServletConfig config) throws ServletException{
+	    this.setSessionLength(Integer.parseInt(config.getInitParameter("sessionMinutes")));
+	    if (this.sessionLength <= 0) {
+	    	throw new ServletException("sessionLength config error");
+	    }
+  		this.context = config.getServletContext();
     }
  
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
@@ -63,17 +83,17 @@ public class LoginServlet extends HttpServlet {
         
         //fetch user data from persistence
         String record = this.fetchPassword(user);
-        if(record != null && record.equals(pwd)){
-        	//create a session
-            HttpSession session = request.getSession();
+        if (record != null && record.equals(getHash(pwd))){
+        	HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            //set session expiration
+            //session expiration
             session.setMaxInactiveInterval(this.sessionLength);
             Cookie cookie = new Cookie("user", user);
             cookie.setMaxAge(-1);
             response.addCookie(cookie);
             response.sendRedirect("welcome.jsp");
-        }else{
+            this.context.log("Login :: logging in user: "+user);
+        } else {
             response.getWriter().println("<font color=red>Wrong username password combination</font>");
             request.getRequestDispatcher("/login.html").include(request, response);
         }
@@ -81,7 +101,9 @@ public class LoginServlet extends HttpServlet {
     }
     
     /**
-     * Abstraction to fetch user record from persistence layer (db)
+	 * THIS SHOULD BE HANDLED BY A PERSISTENCE ACCESSOR CLASS
+	 * 
+     * Abstraction to fetch user record from persistence layer (db) - persistence access should be injected
      * @param userID
      * @return
      */
