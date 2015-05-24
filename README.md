@@ -7,9 +7,11 @@ Users are assigned roles and resources are mapped to roles - this gives users ac
 
 ## To use:
 
-Application's context root must be set to **"/"** (root).
+Please rebuild from source and deploy to your favorite server (maven build currently under construction - app developed in Eclipse with Tomcat).
 
-Login form at **/login.html**. Log in with username 1, 2 or 3 (same pwd as username).
+Set application's context root to **"/"** (root).
+
+Start server and reach login form at **/login.html**. Log in with username 1, 2 or 3 (same pwd as username).
 
 Users are directed to a welcome page, containing links to all resources (**href="/resource?p={id}"**):
 
