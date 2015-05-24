@@ -1,16 +1,20 @@
 # Simple Java User Web Application
-Dynamic java web app - users can login and view authorized pages. Meets the requirements listed below (Requirements section)
+Dynamic java web app - users can login and view their authorized pages only. Meets the requirements listed below (Requirements section)
 
 Uses servlets, servlet filters, servlet sessions and jsps.
 
-Users are assigned roles and resources are mapped to these roles - this gives users view access to the resource.
+Users are assigned roles and resources are mapped to roles - this gives users access to the resource.
 
 Welcome page at /login.html, login with username 1, 2 or 3 (same pwd as username).
-Users are directed to a successful login page, they can then access their resource at /resource?p={id}
-User has access to resource with same id as their username. This is done via userId-userRole and resourceId-userRole relationship (as would work in a real persistence layer)
 
-Best practices:
-Persistence of application data should always be done on it's own layer.
+Users are directed to a welcome page, containing links to all resources (/resource?p={id}):
+  User '1' has access to /resource?p=1 only (with role PAGINA_1)
+  User '2' has access to /resource?p=2 only (with role PAGINA_2)
+  User '3' has access to /resource?p=3 only (with role PAGINA_3)
+
+Best practices (to be included):
+  Persistence of application data should always be done on it's own layer.
+  Password hashing should be done prior to persising (and comparing) user input.
 
 ## Pending
 Automated build is in the process (branch maven)
