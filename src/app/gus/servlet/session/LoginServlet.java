@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
- 
+
 /**
  * Login endpoint
  */
@@ -42,29 +42,37 @@ public class LoginServlet extends HttpServlet {
 
     protected int sessionLength = 0;
 
-    public void init(ServletConfig servletConfig) throws ServletException{
-      this.sessionLength = Integer.parseInt(servletConfig.getInitParameter("sessionMinutes"));
+    public int getSessionLength() {
+		return sessionLength;
+	}
+
+	public void setSessionLength(int minutes) {
+		this.sessionLength = minutes * 60;
+	}
+
+	public void init(ServletConfig conf) throws ServletException{
+      this.setSessionLength(Integer.parseInt(conf.getInitParameter("sessionMinutes")));
       if (this.sessionLength <= 0) {
-    	  throw new ServletException("sessionMinutes configuration error");
+    	  throw new ServletException("sessionLength config error");
       }
     }
  
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
-        String user = request.getParameter("user");
-        String pwd = request.getParameter("pwd");
+        String user = request.getParameter("u");
+        String pwd = request.getParameter("p");
         
         //fetch user data from persistence
-        String record = this.fetchUser(user);
+        String record = this.fetchPassword(user);
         if(record != null && record.equals(pwd)){
         	//create a session
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             //set session expiration
-            session.setMaxInactiveInterval(this.sessionLength*60);
-            Cookie userName = new Cookie("user", user);
-            userName.setMaxAge(this.sessionLength*60);
-            response.addCookie(userName);
-            response.sendRedirect("login-success.jsp");
+            session.setMaxInactiveInterval(this.sessionLength);
+            Cookie cookie = new Cookie("user", user);
+            cookie.setMaxAge(-1);
+            response.addCookie(cookie);
+            response.sendRedirect("welcome.jsp");
         }else{
             response.getWriter().println("<font color=red>Wrong username password combination</font>");
             request.getRequestDispatcher("/login.html").include(request, response);
@@ -73,12 +81,11 @@ public class LoginServlet extends HttpServlet {
     }
     
     /**
-     * Abstraction to fetch user records from persistence layer (db)
+     * Abstraction to fetch user record from persistence layer (db)
      * @param userID
      * @return
      */
-    protected String fetchUser(String userID){
+    protected String fetchPassword(String userID){
         return userHash.get(userID);
     }
- 
 }

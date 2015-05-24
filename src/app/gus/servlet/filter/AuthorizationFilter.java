@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -14,10 +15,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import app.gus.security.voter.ResourceVoterInterface;
- 
+
+/**
+ * System Firewall
+ * 
+ * Allows auth, then filters by checking for:
+ *  - User authentication
+ *  - Resource security
+ *  - User-Resource Permission (roles)
+ */
 @WebFilter("/AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
 	
+	protected ServletContext context;
 	protected ResourceVoterInterface voter;
 	
 	public AuthorizationFilter setVoter(ResourceVoterInterface voter) {
@@ -26,15 +36,15 @@ public class AuthorizationFilter implements Filter {
 		return this;
 	}
 
-    public void init(FilterConfig fConfig) throws ServletException {
+    public void init(FilterConfig config) throws ServletException {
+    	this.context = config.getServletContext();
     }
      
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-    	String uri = req.getRequestURI();
         
-        //allow login / logout servlets and resources
-        if (this.isAuthenticationResource(uri)) {
+        //allow login / logout requests
+        if (this.isAuthRequest(req)) {
     		chain.doFilter(request, response);
     		
     		return;
@@ -43,18 +53,22 @@ public class AuthorizationFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         
         //apply filters to all other resources
-        if (this.isAuthenticated(req, res) &&
-    		this.isResourceAllowed(req, res, uri) &&
+        if (this.isUserAuthenticated(req, res) &&
+    		this.isPublicResource(req, res) &&
     		this.isUserAuthorized(req, res)) {
         		chain.doFilter(request, response);
         }
     }
     
-    protected boolean isAuthenticationResource(String uri) throws IOException {
+    /*
+     * Let requests for authentication reach their endpoints
+     */
+    protected boolean isAuthRequest(HttpServletRequest req) throws IOException {
+    	String uri = req.getRequestURI();
     	if (uri.endsWith("login.html") ||
         	uri.endsWith("login-servlet") ||
-        	uri.endsWith("login-success.jsp") ||
-        	uri.endsWith("logout-servlet")) {
+        	uri.endsWith("logout-servlet") ||
+        	(uri.endsWith("welcome.jsp") && req.getSession(false) != null)) {
     		
     		return true;
     	}
@@ -62,9 +76,9 @@ public class AuthorizationFilter implements Filter {
     	return false;
     }
     
-    protected boolean isAuthenticated(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    protected boolean isUserAuthenticated(HttpServletRequest req, HttpServletResponse res) throws IOException {
     	if(req.getSession(false) == null){
-        	System.out.println("AuthenticationFilter :: unauthenticated request for resource: "+req.getRequestURI());
+    		this.context.log("Filter :: unauthenticated request for resource: "+req.getRequestURI());
             res.sendRedirect("/login.html");
             
             return false;
@@ -73,10 +87,14 @@ public class AuthorizationFilter implements Filter {
         return true;
     }
 
-    protected boolean isResourceAllowed(HttpServletRequest req, HttpServletResponse res, String uri) throws IOException {
-    	//block direct access to page.jsp resource
+    /*
+     * 
+     */
+    protected boolean isPublicResource(HttpServletRequest req, HttpServletResponse res) throws IOException {
+    	String uri = req.getRequestURI();
+    	//.jsp may not be requested directly
     	if (uri.contains("page.jsp")){
-        	System.out.println("AuthenticationFilter :: attempted direct access to resource: "+uri);
+    		this.context.log("Filter :: direct access attempted to: "+uri);
         	res.sendError(HttpServletResponse.SC_FORBIDDEN);
         	
             return false;
@@ -87,13 +105,11 @@ public class AuthorizationFilter implements Filter {
 
     protected boolean isUserAuthorized(HttpServletRequest req, HttpServletResponse res) throws IOException {
     	String requestedResourceID = req.getParameter("p");
-    	System.out.println("AuthorizationFilter :: Requested param: " + requestedResourceID);
-    	
     	HttpSession session = req.getSession(false);
     	String userID = (String) session.getAttribute("user");
-        System.out.println("AuthorizationFilter:: current user: "+userID);
+    	this.context.log("Filter :: request for p=" + requestedResourceID + " by user "+userID);
         
-        //ask voter if resource is allowed for user
+        //delegate user-role check to voter
         if (this.voter.doVote(userID, requestedResourceID)) {
         	return true;
         }

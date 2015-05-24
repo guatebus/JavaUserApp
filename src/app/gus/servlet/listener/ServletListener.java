@@ -8,6 +8,10 @@ import javax.servlet.annotation.WebListener;
 import app.gus.security.voter.ResourceVoter;
 import app.gus.servlet.filter.AuthorizationFilter;
 
+/**
+ * Adds the AuthorizationFilter to the ServletContext
+ *  
+ */
 @WebListener
 public class ServletListener implements ServletContextListener {
 	
@@ -15,7 +19,7 @@ public class ServletListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext context = sce.getServletContext();
 		AuthorizationFilter authFilter = new AuthorizationFilter();
-		//DependencyInjection has to be by setter injection as constructor injection causes exception...
+		// setter DI as constructor injection not supported...
 		authFilter.setVoter(new ResourceVoter());
 		context.addFilter("AuthorizationFilter", authFilter).addMappingForUrlPatterns(null, false, "/*");
 	}

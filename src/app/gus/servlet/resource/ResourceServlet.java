@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
  
 /**
- * Resource request endpoint
+ * 'Resource' (page) request endpoint
  */
 @WebServlet(
             name = "ResourceServlet" ,
@@ -21,7 +21,7 @@ public class ResourceServlet extends HttpServlet {
 	private static final long serialVersionUID = -7565940648825117787L;
 
     /**
-     * Lists available resources
+     * Lists available 'resources' (pages)
      * ** In production, this data would be in the persistence layer **
      */
 	private static final List<Integer> availableResources;
@@ -31,14 +31,14 @@ public class ResourceServlet extends HttpServlet {
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
     	System.out.println("ResourceServlet :: Requested resource: " + request.getRequestURI());
-	String requestedResourceID = request.getParameter("p");
+    	String requestedResourceID = request.getParameter("p");
     	if (requestedResourceID != null) {
             System.out.println("ResourceServlet :: Requested param: " + requestedResourceID);
-	    if (availableResources.contains(Integer.parseInt(requestedResourceID))) {
-            	request.getRequestDispatcher("page.jsp").include(request, response);
-                
-                return;
-            }
+		    if (availableResources.contains(Integer.parseInt(requestedResourceID))) {
+	            request.getRequestDispatcher("page.jsp").include(request, response);
+	                
+	            return;
+	        }
     	}
     	response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
