@@ -9,7 +9,8 @@ import app.gus.security.voter.ResourceVoter;
 import app.gus.servlet.filter.AuthorizationFilter;
 
 /**
- * Adds the AuthorizationFilter to the ServletContext
+ * Programmatically adds the AuthorizationFilter to the ServletContext.
+ * Uses DI to inject the AuthorizationFilter's dependencies.
  *  
  */
 @WebListener

@@ -3,6 +3,9 @@ package app.gus.security.voter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Voter pattern to determine if a user is allowed access to a resource.
+ */
 public class ResourceVoter implements ResourceVoterInterface {
 
     /**

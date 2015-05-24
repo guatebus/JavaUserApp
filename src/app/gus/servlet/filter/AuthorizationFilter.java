@@ -19,10 +19,10 @@ import app.gus.security.voter.ResourceVoterInterface;
 /**
  * System Firewall
  * 
- * Allows auth, then filters by checking for:
+ * Allows authentication requests, then filters all other requests by checking:
  *  - User authentication
  *  - Resource security
- *  - User-Resource Permission (roles)
+ *  - User-Resource Permission (via the voter pattern which enforces user-role relationships)
  */
 @WebFilter("/AuthorizationFilter")
 public class AuthorizationFilter implements Filter {
