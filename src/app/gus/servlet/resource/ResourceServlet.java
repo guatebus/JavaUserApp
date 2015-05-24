@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,12 +30,18 @@ public class ResourceServlet extends HttpServlet {
 	static {
 		availableResources = Arrays.asList(1, 2, 3);
 	}
-	
+
+	protected ServletContext context;
+
+	public void init(ServletConfig config) throws ServletException{
+  		this.context = config.getServletContext();
+    }
+ 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
-    	System.out.println("ResourceServlet :: Requested resource: " + request.getRequestURI());
+    	this.context.log("ResourceServlet :: requested resource: " + request.getRequestURI());
     	String requestedResourceID = request.getParameter("p");
     	if (requestedResourceID != null) {
-            System.out.println("ResourceServlet :: Requested param: " + requestedResourceID);
+    		this.context.log("ResourceServlet :: requested param: " + requestedResourceID);
 		    if (availableResources.contains(Integer.parseInt(requestedResourceID))) {
 	            request.getRequestDispatcher("page.jsp").include(request, response);
 	                
