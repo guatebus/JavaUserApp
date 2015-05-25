@@ -43,7 +43,7 @@ public class ResourceServlet extends HttpServlet {
     	if (requestedResourceID != null) {
     		this.context.log("ResourceServlet :: requested param: " + requestedResourceID);
 		    if (availableResources.contains(Integer.parseInt(requestedResourceID))) {
-	            request.getRequestDispatcher("page.jsp").include(request, response);
+	            request.getRequestDispatcher("page.jsp").forward(request, response);
 	                
 	            return;
 	        }

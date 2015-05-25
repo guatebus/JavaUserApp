@@ -95,7 +95,7 @@ public class LoginServlet extends HttpServlet {
             this.context.log("Login :: logging in user: "+user);
         } else {
             response.getWriter().println("<font color=red>Wrong username password combination</font>");
-            request.getRequestDispatcher("/login.html").include(request, response);
+            request.getRequestDispatcher("/login.html").forward(request, response);
         }
  
     }
