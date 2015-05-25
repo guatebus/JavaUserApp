@@ -1,4 +1,4 @@
-# Simple Java User Web Application
+# Dynamic Java Web Application
 Dynamic java web app - users can login and view their authorized pages only. Meets the requirements listed below (in the Requirements section).
 
 Uses servlets, servlet filters, servlet sessions and jsps.
