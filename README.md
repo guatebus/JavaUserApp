@@ -1,7 +1,7 @@
 # Dynamic Java Web Application
 Dynamic java web app - users can login and view their authorized pages only. Meets the requirements listed below (in the Requirements section).
 
-Uses servlets, servlet filters, servlet sessions and jsps.
+Uses servlets, servlet filters, servlet sessions and jsps. All servlets configured via annotations (init params included); the AuthorizationFilter is programmatically added by the ServletListener class to allow dependency injection of the ResourceVoter.
 
 Users are assigned roles and resources are mapped to roles - this gives users access to the resource.
 
