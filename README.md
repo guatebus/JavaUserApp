@@ -11,7 +11,7 @@ Users are assigned roles and resources are mapped to roles - this gives users ac
 ## To use:
 
 #### Install:
-If installing, rebuild from source and deploy to your favorite server (maven build currently under construction). Set application's context root to **"/"** (root).
+If installing, rebuild from source and deploy to your favorite server (maven supported). Set application's context root to **"/"** (root).
 
 Start server and reach login at **/login.html**. 
 
