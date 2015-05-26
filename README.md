@@ -26,11 +26,12 @@ Users are directed to a welcome page, containing links to all resources (**href=
 
 ##Best practices (to be included):
 
+ - TDD should be used for development (using JUnit) - not implemented because of time constraints
  - Persistence of application data should always be done on it's own layer.
  - Password hashing should be done prior to persising (and comparing) user input.
 
 ## Pending
-Automated build is in the process (branch maven)
+Tests scaffolding with JUnit - to allow TDD
 
 ## Requirements
 En JAVA. Es un plus hacerlo con las extensiones funcionales.
