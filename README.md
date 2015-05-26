@@ -1,4 +1,7 @@
 # Dynamic Java Web Application
+
+Live demo at http://javauserapp-lunchies52.rhcloud.com/login.html
+
 Dynamic java web app - users can login and view their authorized pages only. Meets the requirements listed below (in the Requirements section).
 
 Uses servlets, servlet filters, servlet sessions and jsps. All servlets configured via annotations (init params included); the AuthorizationFilter is programmatically added by the ServletListener class to allow dependency injection of the ResourceVoter.
@@ -7,11 +10,13 @@ Users are assigned roles and resources are mapped to roles - this gives users ac
 
 ## To use:
 
-Please rebuild from source to deploy to your favorite server (maven build currently under construction; the app was developed in Eclipse with Tomcat).
+#### Install:
+If installing, rebuild from source and deploy to your favorite server (maven build currently under construction). Set application's context root to **"/"** (root).
 
-Set application's context root to **"/"** (root).
+Start server and reach login at **/login.html**. 
 
-Start server and reach login at **/login.html**. Log in with username 1, 2 or 3 (same pwd as username).
+#### Demo:
+Log in with username 1, 2 or 3 (same pwd as username) - app instance at http://javauserapp-lunchies52.rhcloud.com/login.html
 
 Users are directed to a welcome page, containing links to all resources (**href="/resource?p={id}"**):
 
