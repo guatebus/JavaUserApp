@@ -20,9 +20,9 @@ Log in with username 1, 2 or 3 (same pwd as username) - app instance at http://j
 
 Users are directed to a welcome page, containing links to all resources (**href="/resource?p={id}"**):
 
- - User '1' has access to /resource?p=1 only (with role PAGINA_1)
- - User '2' has access to /resource?p=2 only (with role PAGINA_2)
- - User '3' has access to /resource?p=3 only (with role PAGINA_3)
+ - User '1' has access to /resources?p=1 only (with role PAGINA_1)
+ - User '2' has access to /resources?p=2 only (with role PAGINA_2)
+ - User '3' has access to /resources?p=3 only (with role PAGINA_3)
 
 ##Best practices (to be included):
 
