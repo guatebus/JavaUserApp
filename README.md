@@ -4,11 +4,19 @@ Dynamic java webapp for enforcing user-group permissions through roles
 
 Demo at http://javauserapp-lunchies52.rhcloud.com/login.html
 
-Dynamic java web app - users can login and view their authorized pages only. Meets the requirements listed below (in the Requirements section).
+Users can login and view only their authorized resources. Users are assigned roles and roles are mapped to resources, abstraction used to control user access to resources.
 
-Uses servlets, servlet filters, servlet sessions and jsps. All servlets configured via annotations (init params included); the AuthorizationFilter is programmatically added by the ServletListener class to allow dependency injection of the ResourceVoter.
+Fulfills the requirements listed in the Requirements section below.
 
-Users are assigned roles and resources are mapped to roles - this gives users access to the resource.
+Uses:
+
+ - servlets
+ - servlet filters
+ - servlet sessions 
+ - jsps
+
+Servlets configured via annotations (init params included).
+AuthorizationFilter added programmatically by ServletListener to allow dependency injection of ResourceVoter.
 
 ## To use:
 
