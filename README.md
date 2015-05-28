@@ -2,7 +2,7 @@
 
 Dynamic java webapp for enforcing user-group permissions through roles
 
-Demo at http://javauserapp-lunchies52.rhcloud.com/login.html
+Demo at <a href="http://javauserapp-lunchies52.rhcloud.com/login.html" target="_blank">javauserapp-lunchies52.rhcloud.com/login.html</a>
 
 Users can login and view only their authorized resources. Users are assigned roles and roles are mapped to resources, abstraction used to control user access to resources.
 
@@ -26,7 +26,7 @@ If installing, rebuild from source and deploy to your favorite server (maven sup
 Start server and reach login at **/login.html**. 
 
 #### Demo:
-Log in with username 1, 2 or 3 (same pwd as username) - app instance at http://javauserapp-lunchies52.rhcloud.com/login.html
+Log in with username 1, 2 or 3 (same pwd as username) - app instance at <a href="http://javauserapp-lunchies52.rhcloud.com/login.html" target="_blank">javauserapp-lunchies52.rhcloud.com/login.html</a>
 
 Users are directed to a welcome page, containing links to all resources (**href="/resource?p={id}"**):
 
