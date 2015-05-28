@@ -1,6 +1,8 @@
-# Dynamic Java Web Application
+# User permissions via roles
 
-Live demo at http://javauserapp-lunchies52.rhcloud.com/login.html
+Dynamic java webapp for enforcing user-group permissions through roles
+
+Demo at http://javauserapp-lunchies52.rhcloud.com/login.html
 
 Dynamic java web app - users can login and view their authorized pages only. Meets the requirements listed below (in the Requirements section).
 
